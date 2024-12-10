@@ -15,6 +15,12 @@ df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(lambda x: re.sub(r'\s+',
 # Supprimer les lignes où "Contenu de l'avis" est vide (NaN ou équivalent)
 df = df.dropna(subset=["Contenu de l'avis"])
 
+# Supprimer les lignes où "Contenu de l'avis" est NaN ou vide
+df = df[df["Contenu de l'avis"].notna()]  # Supprime les NaN
+df = df[df["Contenu de l'avis"] != 'nan']  # Supprime les lignes contenant 'nan' comme texte
+
+
+
 # Convertir les textes en minuscules
 df["Contenu de l'avis"] = df["Contenu de l'avis"].str.lower()
 
@@ -41,10 +47,15 @@ def correct_spelling(text):
 # Exemple d'utilisation
 text = "I loved thiss!!!"
 corrected_text = correct_spelling(text)
-print(corrected_text)
 
 # Remplacer les emojis par des descriptions textuelles
-df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(emoji.demojize)
+def replace_emojis(text):
+    return emoji.demojize(text, delimiters=("", ""))
+
+# Appliquer la fonction à la colonne "Contenu de l'avis"
+df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(replace_emojis)
+
+
 
 # Exporter le DataFrame en fichier CSV
 df.to_csv('avis_transformes.csv', index=False, encoding='utf-8')
