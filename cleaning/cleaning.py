@@ -136,6 +136,10 @@ df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(replace_emojis)
 # Supprimer les guillemets de la colonne "Contenu de l'avis"
 df['Contenu de l\'avis'] = df['Contenu de l\'avis'].str.replace('"', '', regex=False)
 
+# Remplacement des points-virgules dans la colonne 'contenu_de_l_avis'
+df["Contenu de l\'avis"] = df["Contenu de l\'avis"].str.replace(";", "", regex=False)
+
+
 import csv
 df.to_csv(
     'avis_transformes_4.csv',
