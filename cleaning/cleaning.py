@@ -62,12 +62,14 @@ country_mapping = {
 
 # Lire le fichier CSV (avec séparateur ;)
 df = pd.read_csv(
-    r"C:\Users\fayca\Documents\GitHub\datacamp_efrei\luggage_superstore_reviews (1).csv",
-    sep=';',  # Changez le séparateur si nécessaire
+    r"C:\Users\fayca\Documents\GitHub\datacamp_efrei\raw_data.csv",
+    sep='|',  # Changez le séparateur si nécessaire
     on_bad_lines='skip',  # Ignore les lignes mal formatées
     encoding='utf-8',  # Spécifiez l'encodage si besoin
     engine='python'  # Utilisez le moteur Python pour une meilleure gestion des erreurs
 )
+
+
 
 # Remplacer les codes des pays par les noms complets
 df['Pays'] = df['Pays'].map(country_mapping)
@@ -102,6 +104,10 @@ import re
 def remove_non_linguistic(text):
     return re.sub(r'"', '', text)
 
+# Supprimer tous les guillemets doubles (") dans la colonne "Contenu de l'avis"
+df['Contenu de l\'avis'] = df['Contenu de l\'avis'].apply(lambda x: x.replace('"', '') if isinstance(x, str) else x)
+
+
 # Appliquer la fonction sur la colonne "Contenu de l'avis"
 df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(remove_non_linguistic)
 
@@ -119,6 +125,7 @@ def correct_spelling(text):
 text = "I loved thiss!!!"
 corrected_text = correct_spelling(text)
 
+
 # Remplacer les emojis par des descriptions textuelles
 def replace_emojis(text):
     return emoji.demojize(text, delimiters=("", ""))
@@ -126,7 +133,16 @@ def replace_emojis(text):
 # Appliquer la fonction à la colonne "Contenu de l'avis"
 df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(replace_emojis)
 
+# Supprimer les guillemets de la colonne "Contenu de l'avis"
+df['Contenu de l\'avis'] = df['Contenu de l\'avis'].str.replace('"', '', regex=False)
 
-
-# Exporter le DataFrame en fichier CSV
-df.to_csv('avis_transformes_4.csv', index=False, encoding='utf-8')
+import csv
+df.to_csv(
+    'avis_transformes_4.csv',
+    index=False,
+    encoding='utf-8',
+    sep=";",  # Utiliser ; comme séparateur
+    quoting=csv.QUOTE_NONE,  # Désactiver les guillemets automatiques
+    escapechar="\\",
+    lineterminator='\n'  # Assurer une bonne gestion des retours à la ligne
+)
