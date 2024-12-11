@@ -3,8 +3,74 @@ import re
 import emoji
 from textblob import TextBlob
 
-# Load your dataset
-df = pd.read_csv(r"C:\Users\fayca\Documents\GitHub\datacamp_efrei\scraping\luggage_superstore_reviews.csv")
+
+# Mapping des codes pays
+country_mapping = {
+    'GB': 'Royaume-Uni',
+    'DE': 'Allemagne',
+    'US': 'États-Unis',
+    'RS': 'Serbie',
+    'JO': 'Jordanie',
+    'GR': 'Grèce',
+    'FR': 'France',
+    'QA': 'Qatar',
+    'EG': 'Égypte',
+    'AU': 'Australie',
+    'ZA': 'Afrique du Sud',
+    'SA': 'Arabie Saoudite',
+    'ES': 'Espagne',
+    'DK': 'Danemark',
+    'MT': 'Malte',
+    'NG': 'Nigeria',
+    'CA': 'Canada',
+    'CY': 'Chypre',
+    'BE': 'Belgique',
+    'JM': 'Jamaïque',
+    'IT': 'Italie',
+    'PT': 'Portugal',
+    'NL': 'Pays-Bas',
+    'TZ': 'Tanzanie',
+    'GI': 'Gibraltar',
+    'JE': 'Jersey',
+    'VN': 'Vietnam',
+    'MX': 'Mexique',
+    'AE': 'Émirats arabes unis',
+    'MC': 'Monaco',
+    'NZ': 'Nouvelle-Zélande',
+    'MY': 'Malaisie',
+    'MU': 'Maurice',
+    'IN': 'Inde',
+    'PK': 'Pakistan',
+    'KE': 'Kenya',
+    'GG': 'Guernesey',
+    'IE': 'Irlande',
+    'AT': 'Autriche',
+    'HR': 'Croatie',
+    'NI': 'Nicaragua',
+    'SG': 'Singapour',
+    'UA': 'Ukraine',
+    'HK': 'Hong Kong',
+    'IM': 'Île de Man',
+    'DZ': 'Algérie',
+    'AG': 'Antigua-et-Barbuda',
+    'KW': 'Koweït',
+    'TT': 'Trinité-et-Tobago',
+    'ID': 'Indonésie',
+    'NO': 'Norvège',
+    'CH': 'Suisse'
+}
+
+# Lire le fichier CSV (avec séparateur ;)
+df = pd.read_csv(
+    r"C:\Users\fayca\Documents\GitHub\datacamp_efrei\luggage_superstore_reviews (1).csv",
+    sep=';',  # Changez le séparateur si nécessaire
+    on_bad_lines='skip',  # Ignore les lignes mal formatées
+    encoding='utf-8',  # Spécifiez l'encodage si besoin
+    engine='python'  # Utilisez le moteur Python pour une meilleure gestion des erreurs
+)
+
+# Remplacer les codes des pays par les noms complets
+df['Pays'] = df['Pays'].map(country_mapping)
 
 # Normalize ratings: Extract numerical values from the `Note` column
 df['Note'] = df['Note'].str.extract(r'(\d+)').astype(int)
@@ -29,11 +95,15 @@ def clean_whitespace(text):
 
 df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(clean_whitespace)
 
-# Supprimer les caractères non linguistiques
-def remove_non_linguistic(text):
-    return re.sub(r'[^a-zA-Z0-9\s.,!?]', '', text)
+import re
 
+# Fonction pour supprimer les guillemets doubles
+def remove_non_linguistic(text):
+    return re.sub(r'"', '', text)
+
+# Appliquer la fonction sur la colonne "Contenu de l'avis"
 df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(remove_non_linguistic)
+
 
 # Convert "Date de publication" to datetime format
 df["Date de publication"] = pd.to_datetime(df["Date de publication"])
@@ -58,4 +128,4 @@ df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(replace_emojis)
 
 
 # Exporter le DataFrame en fichier CSV
-df.to_csv('avis_transformes.csv', index=False, encoding='utf-8')
+df.to_csv('avis_transformes_4.csv', index=False, encoding='utf-8')
