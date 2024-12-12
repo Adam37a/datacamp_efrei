@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from st_on_hover_tabs import on_hover_tabs
 import plotly.express as px
 
-csv_path = os.path.join(os.path.dirname(__file__), 'sentiments_mappés.csv')
+csv_path = os.path.join(os.path.dirname(__file__), './predictions/sentiment_mappés.csv')
 df = pd.read_csv(csv_path, delimiter=';')
 
 st.set_page_config(layout="wide")
@@ -52,7 +52,6 @@ if tabs == 'Tableau de bord':
     st.title('Distribution des notes par année')
     note_distribution = filtered_df.groupby(['Year', 'Sentiment Description']).size().unstack(fill_value=0)
     st.bar_chart(note_distribution)
-
 
 elif tabs == 'Nuage de mots':
     text = " ".join(str(review) for review in filtered_df["Contenu de l'avis"])
