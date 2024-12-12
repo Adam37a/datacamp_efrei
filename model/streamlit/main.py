@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from st_on_hover_tabs import on_hover_tabs
 import plotly.express as px
 
-csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'prediction', 'sentiments_mappés.csv'))
+csv_path = os.path.join(os.path.dirname(__file__), 'sentiments_mappés.csv')
 df = pd.read_csv(csv_path, delimiter=';')
 
 st.set_page_config(layout="wide")
@@ -77,6 +77,7 @@ elif tabs == 'Carte':
         title="Nombre d'avis par pays"
     )
     fig.update_layout(margin=dict(l=23, r=23, t=23, b=23))
+
     st.plotly_chart(fig, use_container_width=True)
     fig = px.pie(
         review_counts,
