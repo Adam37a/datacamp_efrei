@@ -16,7 +16,7 @@ mapping = {
 df["Sentiment Description"] = df["Predicted Sentiment"].map(mapping)
 
 # Exporter le DataFrame en fichier CSV
-output_file = "sentiments_mappés.csv"
+output_file = "../prediction/sentiments_mappés.csv"
 
 df.to_csv(
     'sentiments_mappés.csv',

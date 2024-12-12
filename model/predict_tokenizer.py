@@ -8,10 +8,10 @@ import numpy
 model_name = "nlptown/bert-base-multilingual-uncased-sentiment"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
-input_file_path = r"C:\Users\ahana\Desktop\ML_datacamp\datacamp_efrei\data_cleaning\avis_transformes_4.csv"
+input_file_path = r"datacamp_efrei\data_cleaning\avis_transformes_4.csv"
 output_folder = r"datacamp_efrei\prediction"
 os.makedirs(output_folder, exist_ok=True)
-duplicated_file_path = os.path.join(output_folder, "luggage_superstore_reviews.csv")
+duplicated_file_path = os.path.join(output_folder, "luggage_predicted_review.csv")
 shutil.copy(input_file_path, duplicated_file_path)
 df = pd.read_csv(duplicated_file_path, encoding='utf-8', delimiter=';')
 
