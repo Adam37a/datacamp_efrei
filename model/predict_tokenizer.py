@@ -3,6 +3,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import os
 import shutil
+import csv
 import numpy
 
 model_name = "nlptown/bert-base-multilingual-uncased-sentiment"
@@ -11,7 +12,7 @@ model = AutoModelForSequenceClassification.from_pretrained(model_name)
 input_file_path = r"datacamp_efrei\data_cleaning\avis_transformes_4.csv"
 output_folder = r"datacamp_efrei\prediction"
 os.makedirs(output_folder, exist_ok=True)
-duplicated_file_path = os.path.join(output_folder, "luggage_predicted_review.csv")
+duplicated_file_path = os.path.join(output_folder, "luggage_predicted_review_for_analysis.csv")
 shutil.copy(input_file_path, duplicated_file_path)
 df = pd.read_csv(duplicated_file_path, encoding='utf-8', delimiter=';')
 
@@ -32,3 +33,30 @@ df['Predicted Sentiment'] = predictions
 df.to_csv(duplicated_file_path, index=False)
 
 print(f"Processed file saved to {duplicated_file_path}")
+
+
+df = pd.read_csv(duplicated_file_path, encoding='utf-8', delimiter=';')
+
+mapping = {
+    1: "Très négatif",
+    2: "Négatif",
+    3: "Neutre",
+    4: "Positif",
+    5: "Très positif"
+}
+
+df["Sentiment Description"] = df["Predicted Sentiment"].map(mapping)
+
+output_file = "../prediction/sentiments_mappés_output_final.csv"
+
+df.to_csv(
+    'sentiments_mappés.csv',
+    index=False,
+    encoding='utf-8',
+    sep=";",
+    quoting=csv.QUOTE_NONE,
+    escapechar="\\",
+    lineterminator='\n'
+)
+
+shutil.copy(duplicated_file_path,r"datacamp_efrei\model\streamlit\sentiments_mappés_output_final.csv")
