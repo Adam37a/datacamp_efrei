@@ -19,10 +19,11 @@ def preprocess_text(text):
     return context + text
 
 if __name__ == '__main__':
-    input_file_path = "avis_transformes_4.csv"
-    output_folder = r"datacamp_efrei/model/streamlit"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    input_file_path = os.path.join(script_dir, "..", "data_cleaning", "avis_transformes_4.csv")
+    output_folder = r"streamlit"
     os.makedirs(output_folder, exist_ok=True)
-    duplicated_file_path = os.path.join(output_folder, "luggage_predicted_review_pipeline_model.csv")
+    duplicated_file_path = os.path.join(output_folder, "luggage_predicted_review_pipeline.csv")
 
     try:
         shutil.copy(input_file_path, duplicated_file_path)

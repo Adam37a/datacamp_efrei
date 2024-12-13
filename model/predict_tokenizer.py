@@ -9,10 +9,11 @@ import numpy
 model_name = "nlptown/bert-base-multilingual-uncased-sentiment"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
-input_file_path = r"datacamp_efrei\data_cleaning\avis_transformes_4.csv"
-output_folder = r"datacamp_efrei\model\streamlit"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+input_file_path = os.path.join(script_dir, "..", "data_cleaning", "avis_transformes_4.csv")
+output_folder = r"streamlit"
 os.makedirs(output_folder, exist_ok=True)
-duplicated_file_path = os.path.join(output_folder, "luggage_predicted_review_for_analysis_test.csv")
+duplicated_file_path = os.path.join(output_folder, "luggage_predicted_review_tokenizer.csv")
 shutil.copy(input_file_path, duplicated_file_path)
 df = pd.read_csv(duplicated_file_path, encoding='utf-8', delimiter=';')
 
@@ -31,9 +32,6 @@ for index, row in df.iterrows():
 
 df['Predicted Sentiment'] = predictions
 
-
-print(f"Processed file saved to {duplicated_file_path}")
-
 mapping = {
     1: "Négatif fort",
     2: "Négatif",
@@ -45,3 +43,5 @@ mapping = {
 df["Sentiment Description"] = df["Predicted Sentiment"].map(mapping)
 
 df.to_csv(duplicated_file_path, index=False)
+
+print(f"Processed file saved to {duplicated_file_path}")

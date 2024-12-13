@@ -1,8 +1,7 @@
 import pandas as pd
 import re
-import emoji
 from textblob import TextBlob
-
+import os
 
 # Mapping of country codes to English country names
 country_mapping = {
@@ -60,16 +59,21 @@ country_mapping = {
     'CH': 'Switzerland'
 }
 
-# Lire le fichier CSV (avec séparateur ;)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+project_root = os.path.abspath(os.path.join(script_dir, ".."))
+
+file_path = os.path.join(project_root, "scraping", "scrapped_file.csv")
+
 df = pd.read_csv(
-    r"C:\Users\fayca\Documents\GitHub\datacamp_efrei\raw_data.csv",
-    sep='|',  # Changez le séparateur si nécessaire
-    on_bad_lines='skip',  # Ignore les lignes mal formatées
-    encoding='utf-8',  # Spécifiez l'encodage si besoin
-    engine='python'  # Utilisez le moteur Python pour une meilleure gestion des erreurs
+    file_path,
+    sep=';',
+    on_bad_lines='skip',
+    encoding='utf-8',
+    engine='python'
 )
 
-
+print(df)
 
 # Remplacer les codes des pays par les noms complets
 df['Pays'] = df['Pays'].map(country_mapping)
@@ -126,12 +130,6 @@ text = "I loved thiss!!!"
 corrected_text = correct_spelling(text)
 
 
-# Remplacer les emojis par des descriptions textuelles
-def replace_emojis(text):
-    return emoji.demojize(text, delimiters=("", ""))
-
-# Appliquer la fonction à la colonne "Contenu de l'avis"
-df["Contenu de l'avis"] = df["Contenu de l'avis"].apply(replace_emojis)
 
 # Supprimer les guillemets de la colonne "Contenu de l'avis"
 df['Contenu de l\'avis'] = df['Contenu de l\'avis'].str.replace('"', '', regex=False)
@@ -140,9 +138,16 @@ df['Contenu de l\'avis'] = df['Contenu de l\'avis'].str.replace('"', '', regex=F
 df["Contenu de l\'avis"] = df["Contenu de l\'avis"].str.replace(";", "", regex=False)
 
 
+
 import csv
+
+project_root = os.path.abspath(os.path.join(script_dir, "..",))
+output_folder = os.path.join(project_root, "data_cleaning")
+os.makedirs(output_folder, exist_ok=True)
+duplicated_file_path = os.path.join(output_folder, "avis_transformes_4.csv")
+
 df.to_csv(
-    'avis_transformes_4.csv',
+    duplicated_file_path,
     index=False,
     encoding='utf-8',
     sep=";",  # Utiliser ; comme séparateur

@@ -1,8 +1,9 @@
+import csv
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
-
+import os
 
 def scrape_reviews(page_url):
     response = requests.get(page_url)
@@ -14,38 +15,29 @@ def scrape_reviews(page_url):
 
     for card in review_cards:
         try:
-            # Nom de l'utilisateur
-            #name_tag = card.find("span", {"data-consumer-name-typography": "true"})
-           # name = name_tag.text.strip() if name_tag else None
 
-            # Nombre d'avis de l'utilisateur
-            #review_count_tag = card.find("span", {"data-consumer-reviews-count-typography": "true"})
-           # review_count = review_count_tag.text.strip() if review_count_tag else None
 
-            # Note de l'avis
+            country_tag = card.find("div",class_="typography_body-m__xgxZ_ typography_appearance-subtle__8_H2l styles_detailsIcon__Fo_ua")
+            country = country_tag.find("span").text.strip() if country_tag and country_tag.find("span") else None
+
             score_tag = card.find("div", class_="star-rating_starRating__4rrcf")
             score = score_tag.img['alt'] if score_tag and score_tag.img else None
 
-            # Date de publication
             date_tag = card.find("time")
             published_date = date_tag['datetime'] if date_tag else None
 
-            # Contenu de l'avis
             content_tag = card.find("p", {"data-service-review-text-typography": "true"})
             content = content_tag.text.strip() if content_tag else None
 
-            # Réponse de l'entreprise (si présente)
-            #reply_tag = card.find("p", {"data-service-review-business-reply-text-typography": "true"})
-            #reply = reply_tag.text.strip() if reply_tag else None
 
-            # Ajoute les données extraites à la liste
+
             reviews.append({
-                #"Nom": name,
-                #"Nombre d'avis": review_count,
+
+                "Pays": country,
                 "Note": score,
-                "Date de publication": published_date,
                 "Contenu de l'avis": content,
-                #"Réponse de l'entreprise": reply
+                "Date de publication": published_date,
+
             })
         except Exception as e:
             print(f"Erreur lors de l'extraction d'un avis : {e}")
@@ -53,10 +45,8 @@ def scrape_reviews(page_url):
     return reviews
 
 
-
 base_url = "https://fr.trustpilot.com/review/luggagesuperstore.co.uk?page="
 all_reviews = []
-
 
 for page in range(1, 78):
     print(f"Scraping page {page}")
@@ -65,5 +55,12 @@ for page in range(1, 78):
     time.sleep(2)
 
 df = pd.DataFrame(all_reviews)
-df.to_csv("luggage_superstore_reviews.csv", index=False)
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+project_root = os.path.abspath(os.path.join(script_dir, "..",))
+output_folder = os.path.join(project_root, "scraping")
+os.makedirs(output_folder, exist_ok=True)
+duplicated_file_path = os.path.join(output_folder, "scrapped_file.csv")
+df.to_csv(duplicated_file_path, index=False, sep=";",quoting=csv.QUOTE_NONE, escapechar='\\')
 print("Scraping terminé. Les données sont enregistrées dans 'luggage_superstore_reviews.csv'.")
