@@ -8,3 +8,6 @@ wordcloud
 streamlit-on-Hover-tabs
 plotly
 textblob
+scikit-learn
+seaborn
+numpy
