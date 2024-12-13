@@ -13,15 +13,23 @@ Assurez-vous d'avoir installé les bibliothèques Python suivantes :
 - `transformers`
 - `torch`
 
-Vous pouvez les installer avec la commande suivante :
+Vous pouvez les installer avec la commande suivante pour installer les bibliotheque backend :
 ```bash
 pip install -r requirements.txt
 ```
-
+Vous pouvez les installer avec la commande suivante pour installer les bibliotheque datavisualisation :
+```bash
+pip install -r ./model/streamlit/requirements.txt
+```
 
 # Scraping
 Le script extrait les avis depuis le site Trustpilot.
 
+Exécutez le script scraping.py :
+
+```bash
+python model/scraping.py
+```
 **Fonctionnalité principale** :
 
 Récupérer les données des avis (note, contenu, date de publication) sur plusieurs pages du site.
@@ -37,6 +45,12 @@ datacamp_efrei/scraping/scrapped_file.csv
 # Cleaning
 Le script de nettoyage les données extraites.
 
+Exécutez le script de nettoyage cleaning.py
+
+```bash
+python model/cleaning.py
+```
+
 **Étapes principales :** 
 
 Remplacement des codes pays par leurs noms complets à l’aide d’un dictionnaire.
@@ -49,6 +63,11 @@ datacamp_efrei/data_cleaning/avis_transformes_4.csv
 
 # Prediction tockenizer
 Ce script analyse les sentiments des avis.
+
+executer le ficher :
+```bash
+python model/predict_tokenizer.py
+```
 
 **Fonctionnalité principale :**
 
@@ -67,7 +86,7 @@ Exécutez le script predict_pipeline.py pour effectuer la prédiction en ajoutan
 
 executer le ficher :
 ```bash
-python predict_pipeline.py
+python model/predict_pipeline.py
 ```
 ** Fonctionnalités supplémentaires : **
 
@@ -87,15 +106,14 @@ Ajoute ces descriptions dans une nouvelle colonne.
 Sortie :
 
 ***Fichier sentiments_mappés.csv prêt pour analyse et visualisation.***
-datacamp_efrei/model/streamlit/sentiments_mappés.csv
-
+datacamp_efrei/model/streamlit/luggage_predicted_review_tokenizer.csv
 
 # Évaluer les performances des modèles
 ### Analyse des prédictions du Tokenizer**
 Exécutez le script matrice_confusion_tockenizer.py pour évaluer les performances du modèle basé sur le tokenizer.
 
 ```bash
-python matrice_confusion_tockenizer.py
+python model/matrice_confusion_tockenizer.ipynb
 ```
 
 *** Fonctionnalités : ***
@@ -107,7 +125,7 @@ Calcul de métriques telles que la précision et le MSE.
 Exécutez le script matrice_confusion_pipeline.py pour évaluer les performances du pipeline de prédiction.
 
 ```bash
-python matrice_confusion_pipeline.py
+python matrice_confusion_pipeline.ipynb
 ```
 
 *** Fonctionnalités : ***
