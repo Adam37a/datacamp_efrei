@@ -6,11 +6,7 @@ import matplotlib.pyplot as plt
 from st_on_hover_tabs import on_hover_tabs
 import plotly.express as px
 
-<<<<<<< HEAD
 csv_path = os.path.join(os.path.dirname(__file__), 'luggage_predicted_review.csv')
-=======
-csv_path = os.path.join(os.path.dirname(__file__), 'sentiments_mappés.csv')
->>>>>>> 498eec0a3eb1d221f45d112a557eb5258d0adb18
 df = pd.read_csv(csv_path, delimiter=';')
 
 st.set_page_config(layout="wide")
