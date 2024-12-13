@@ -15,7 +15,7 @@ Assurez-vous d'avoir installé les bibliothèques Python suivantes :
 
 Vous pouvez les installer avec la commande suivante :
 ```bash
-pip install requests beautifulsoup4 pandas textblob emoji transformers torch
+pip install -r requirements.txt
 ```
 
 

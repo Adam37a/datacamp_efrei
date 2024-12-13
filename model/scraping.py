@@ -1,9 +1,10 @@
 import csv
+import os
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
-import os
+
 
 def scrape_reviews(page_url):
     response = requests.get(page_url)
@@ -64,3 +65,4 @@ os.makedirs(output_folder, exist_ok=True)
 duplicated_file_path = os.path.join(output_folder, "scrapped_file.csv")
 df.to_csv(duplicated_file_path, index=False, sep=";",quoting=csv.QUOTE_NONE, escapechar='\\')
 print("Scraping terminé. Les données sont enregistrées dans 'luggage_superstore_reviews.csv'.")
+
